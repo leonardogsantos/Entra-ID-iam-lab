@@ -1,0 +1,16 @@
+
+# Arquivos com senhas temporárias ou dados sensíveis
+senhas-temporarias.csv
+*.secret
+.env
+
+# Logs gerados durante os testes
+jml-log.csv
+*.log
+
+# Arquivos temporários
+*.tmp
+*.bak
+
+# Arquivos locais de configuração
+.vscode/
