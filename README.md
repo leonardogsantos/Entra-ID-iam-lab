@@ -4,8 +4,6 @@ Laboratório prático de **Identity & Access Management (IAM)** em um tenant do 
 
 Todos os usuários e dados usados aqui são fictícios.
 
-📄 **Relatório completo, com todos os prints de cada etapa:** [`relatorio/Relatorio-IAM-Entra-ID.pdf`](relatorio/Relatorio-IAM-Entra-ID.pdf)
-
 ## O que foi feito
 
 | Etapa | O que mostra | Como |
@@ -31,7 +29,7 @@ Entra-ID-iam-lab/
 │   ├── 02-jml.ps1
 │   └── usuarios.csv
 └── relatorio/
-    └── Relatorio_IAM_Entra_ID.pdf   (relatório completo, com os prints de cada etapa)
+    └── Relatorio-IAM-Entra-ID.pdf   (relatório completo, com os prints de cada etapa)
 ```
 
 ## Etapa 1 — Usuários e grupos por script
