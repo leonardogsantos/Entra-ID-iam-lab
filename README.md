@@ -4,6 +4,8 @@ Laboratório prático de **Identity & Access Management (IAM)** em um tenant do 
 
 Todos os usuários e dados usados aqui são fictícios.
 
+📄 **Relatório completo, com todos os prints de cada etapa:** [`relatorio/Relatorio-IAM-Entra-ID.pdf`](relatorio/Relatorio-IAM-Entra-ID.pdf)
+
 ## O que foi feito
 
 | Etapa | O que mostra | Como |
