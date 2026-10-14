@@ -1,8 +1,10 @@
 # Lab de IAM com Microsoft Entra ID
 
-Laboratório prático de **Identity & Access Management (IAM)** em um tenant do Microsoft Entra ID, com foco em três práticas centrais da gestão de acessos: **provisionamento por script**, **menor privilégio (RBAC)** e **ciclo de vida de identidades (Joiner / Mover / Leaver)**.
+Laboratório prático de **Identity & Access Management (IAM)** em um tenant do Microsoft Entra ID, com foco em quatro práticas da gestão de acessos: **provisionamento por script**, **menor privilégio (RBAC)**, **ciclo de vida de identidades (Joiner / Mover / Leaver)** e **autenticação (MFA e OAuth 2.0 / OpenID Connect)**.
 
 Todos os usuários e dados usados aqui são fictícios.
+
+📄 **Relatório completo, com todos os prints de cada etapa:** [`relatorio/Relatorio_IAM_Entra_ID.pdf`](relatorio/Relatorio_IAM_Entra_ID.pdf)
 
 ## O que foi feito
 
@@ -11,6 +13,7 @@ Todos os usuários e dados usados aqui são fictícios.
 | 1. Usuários e grupos | Provisionamento em lote, sem cliques repetitivos | Script PowerShell (Microsoft Graph) lendo um CSV |
 | 2. RBAC com menor privilégio | Cada perfil recebe só a função de que precisa | Atribuição de funções internas do Entra ID |
 | 3. Joiner / Mover / Leaver | Entrada, mudança de área e saída de um usuário | Script PowerShell com registro em log |
+| 4. MFA e OAuth 2.0 / OpenID Connect | Registro de MFA e leitura de um token de ID | Microsoft Authenticator e registro de aplicativo no Entra ID |
 
 ## Ambiente
 
@@ -29,7 +32,7 @@ Entra-ID-iam-lab/
 │   ├── 02-jml.ps1
 │   └── usuarios.csv
 └── relatorio/
-    └── Relatorio-IAM-Entra-ID.pdf   (relatório completo, com os prints de cada etapa)
+    └── Relatorio_IAM_Entra_ID.pdf   (relatório completo, com os prints de cada etapa)
 ```
 
 ## Etapa 1 — Usuários e grupos por script
@@ -76,12 +79,33 @@ O script `02-jml.ps1` executa as três ações e registra cada uma no `jml-log.c
 
 Na mudança de área, o acesso antigo é removido para evitar **acúmulo de privilégios**.
 
+## Etapa 4 — MFA e OAuth 2.0 / OpenID Connect
+
+Duas práticas de autenticação no tenant gratuito.
+
+**MFA com Microsoft Authenticator.** O usuário `bruno.ti`, que tem a função de Administrador de Senhas, registrou a autenticação multifator no primeiro login, com o aplicativo Microsoft Authenticator. A evidência está nos métodos de autenticação do usuário e nos detalhes da autenticação do log de entrada, no [relatório](relatorio/Relatorio_IAM_Entra_ID.pdf).
+
+**Aplicativo com OAuth 2.0 e OpenID Connect.** Foi registrado o aplicativo `lab-iam-oidc` (locatário único), com o URI de redirecionamento `https://jwt.ms`, site da Microsoft que decodifica tokens. Uma requisição ao endpoint de autorização do tenant devolveu um **token de ID** depois do login do `bruno.ti`:
+
+```
+https://login.microsoftonline.com/<ID-DO-DIRETORIO>/oauth2/v2.0/authorize?client_id=<ID-DO-APLICATIVO>&response_type=id_token&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid%20profile%20email&response_mode=fragment&nonce=1234
+```
+
+No token decodificado foram analisados os campos `iss` (emissor), `aud` (o aplicativo), `tid` (o locatário), `name` e `preferred_username` (o usuário), `iat` e `exp` (emissão e validade) e `ver` (versão 2.0). O documento de metadados do OpenID Connect do tenant mostra os endpoints de autorização e de token, o emissor e as chaves de assinatura.
+
+Observações:
+- O token de ID deste teste **não trouxe o campo `amr`**, então a prova do MFA vem do log de entrada, e não do token.
+- O recebimento de tokens de ID (fluxo implícito, considerado legado) foi habilitado só para o teste e **desabilitado em seguida**.
+- Não foram usados SAML, LDAP, SSO corporativo nem ferramentas de PAM. Esta etapa cobre MFA e os conceitos de OAuth 2.0 e OpenID Connect na prática.
+
 ## Decisões de segurança
 
 - Nenhuma senha é escrita no código nem no CSV de entrada. As senhas temporárias são aleatórias e vão para um arquivo local (`senhas-temporarias.csv`), **excluído do repositório pelo `.gitignore`**.
 - Troca de senha obrigatória no primeiro login.
 - Funções administrativas atribuídas por necessidade, com um único Administrador Global.
 - Saída de usuário: conta desativada e sessões revogadas, sem exclusão imediata.
+- MFA com Microsoft Authenticator em conta com função administrativa.
+- Fluxo implícito do aplicativo de teste habilitado só para gerar o token e desabilitado depois.
 
 ## Problemas encontrados e como foram resolvidos
 
