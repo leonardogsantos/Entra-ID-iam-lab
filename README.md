@@ -46,7 +46,7 @@ O script `01-criar-usuarios-grupos.ps1` lê o `usuarios.csv` (nome, usuário, de
 
 ```powershell
 cd scripts
-.\01-criar-usuarios-grupos.ps1 -Dominio "leogarcia.santos10.onmicrosoft.com"
+.\01-criar-usuarios-grupos.ps1 -Dominio "leogarcia.santos10@gmail.onmicrosoft.com"
 ```
 
 ## Etapa 2 — RBAC com menor privilégio
@@ -72,9 +72,9 @@ O script `02-jml.ps1` executa as três ações e registra cada uma no `jml-log.c
 | **Leaver** | Desativa a conta, revoga as sessões ativas e remove o usuário de todos os grupos. **A conta não é excluída**, para manter a trilha de auditoria |
 
 ```powershell
-.\02-jml.ps1 -Acao Joiner -Dominio "leogarcia.santos10.onmicrosoft.com" -Usuario gabriel.ti -Nome "Gabriel (TI)" -Departamento TI -Grupo GRP-TI
-.\02-jml.ps1 -Acao Mover  -Dominio "leogarcia.santos10.onmicrosoft.com" -Usuario gabriel.ti -Departamento Financeiro -Grupo GRP-Financeiro
-.\02-jml.ps1 -Acao Leaver -Dominio "leogarcia.santos10.onmicrosoft.com" -Usuario gabriel.ti
+.\02-jml.ps1 -Acao Joiner -Dominio "leogarcia.santos10@gmail.onmicrosoft.com" -Usuario gabriel.ti -Nome "Gabriel (TI)" -Departamento TI -Grupo GRP-TI
+.\02-jml.ps1 -Acao Mover  -Dominio "leogarcia.santos10@gmail.onmicrosoft.com" -Usuario gabriel.ti -Departamento Financeiro -Grupo GRP-Financeiro
+.\02-jml.ps1 -Acao Leaver -Dominio "leogarcia.santos10@gmail.onmicrosoft.com" -Usuario gabriel.ti
 ```
 
 Na mudança de área, o acesso antigo é removido para evitar **acúmulo de privilégios**.
